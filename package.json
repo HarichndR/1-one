@@ -1,0 +1,25 @@
+{
+  "name": "college-project",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && node app.js",
+    "client": "cd farms-to-market && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "git": "^0.1.5",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "description": "this my project which im build for college with mern stack",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "myCollageProject"
+  },
+  "author": "",
+  "license": "ISC"
+}

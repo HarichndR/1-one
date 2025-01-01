@@ -1,0 +1,29 @@
+.home-container {
+  display: flex;
+  background-color: rgb(188, 64, 10); /* Red container */
+  outline-style: none;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%; /* Ensure it takes the full width of the screen */
+  min-height: 100vh; /* Make sure it covers the full height of the viewport */
+}
+
+.sidebar {
+  width: 5%; /* Sidebar takes 5% of the container width */
+  
+  position: sticky;
+  top: 0;
+  background: linear-gradient(rgb(12, 5, 1), rgba(53, 55, 56, 0.73)); /* Light blue background */
+  padding: 0;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.main-content-table {
+  flex-grow: 1; /* Allows the main content to take up the remaining space */
+  background: linear-gradient(rgb(215, 226, 226), rgba(203, 229, 243, 0.73));/* Light gray background */
+  color: rgb(253, 253, 251); /* White text color */
+  padding: 0;
+  margin: 0;
+}

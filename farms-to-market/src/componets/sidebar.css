@@ -1,0 +1,26 @@
+.sidebar {
+    width: 20%;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    background: linear-gradient(rgb(125, 202, 238), rgba(201, 236, 255, 0.73));
+  }
+  
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  
+  .info {
+    margin-bottom: 20px;
+  }
+  
+  .info h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  .info p {
+    font-size: 1em;
+    margin-bottom: 5px;
+  }
+  

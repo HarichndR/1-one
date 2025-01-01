@@ -1,0 +1,118 @@
+ 
+  .user-profile-container {
+    display: flex;
+    margin-top: 3px;
+    background: #f0f0e0;
+    border-radius: 8px;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 80vh;
+    padding: 20px;
+    width: 30%;
+    height:max-content;
+    transition: all 0.3s ease;
+    
+  }
+  .gotocart{
+    background-color: #53f347;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+  }
+  .user-profile-container:hover{
+    transform: translateY(-4px);
+  box-shadow: 0 20px 20px -15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .profile-image {
+    position: relative;
+    
+    margin-left: 80px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .edit-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .editlogo {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .user-details {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+  }
+  
+  .user-label {
+    font-weight: bold;
+    
+  }
+  
+  .user-input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .user-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+    margin-top: 20px;
+  }
+  .user_data{
+    margin: 16px;
+  }
+  
+  .user-actions a {
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .my-product {
+    background-color: #2251eb;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+  }
+  
+  .logout {
+    background-color: #dc3545;
+  }
+  
+  @media (max-width: 600px) {
+    .user-actions {
+      flex-direction: row-reverse;
+    }
+  
+    .my-product, .logout {
+      flex: 1;
+      margin: 5px;
+    }
+  }
+  

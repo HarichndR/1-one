@@ -1,0 +1,60 @@
+.nav-width {
+  width: 100%;
+  background: #065b66;
+}
+
+.img-fluid {
+  height: 8vw;
+  margin-left: 0px;
+}
+
+/* Basic transition for the search form */
+.search-form {
+  transition: width 0.7s ease-in-out, opacity 0.7s ease-in-out;
+  overflow: hidden;
+  width: 0;
+  opacity: 0;
+}
+
+/* Show state of the search form */
+.search-form.show {
+  width: 250px; /* Adjust according to your form's width */
+  opacity: 1;
+}
+
+/* Hide state of the search form */
+.search-form.hide {
+  width: 0;
+  opacity: 0;
+}
+
+.nav-link {
+  color: aliceblue;
+  padding: auto;
+  font-size: 3vh;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.d-flex {
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
+.nav-profile-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-profile-img {
+  width: 55px; /* Adjust the size of the image as needed */
+  height: 55px;
+  border-radius: 50%; /* Make it a circle */
+}
+
+.nav-profile-msg {
+  font-size: 14px; /* Adjust the font size as needed */
+  color: hwb(0 97% 3% / 0.977); /* Change the text color as needed */
+}

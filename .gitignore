@@ -1,0 +1,9 @@
+backend/node_modules/
+farms-to-market/node_modules/
+
+backend/.env
+farms-to-market/.env
+
+backend/dist/
+farms-to-market/build/
+
