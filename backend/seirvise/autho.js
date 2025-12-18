@@ -1,6 +1,6 @@
 const JWT = require("jsonwebtoken");
 
-const secret = "$uperMan@9307541477";
+const secret = process.env.JWT_SECRET;
 const ACCESS_TOKEN_EXPIRY = '7d';
 
 function createTokenForUser(user) {

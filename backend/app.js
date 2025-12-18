@@ -13,16 +13,39 @@ const  checkForAuthenticationCookie  = require("./midelwear/autho");
 const{ server, io,app} =require('./server');
 const chatRoute = require('./routes/Chat');
 //const app = express();
-const PORT = 8001; // Use your specified port
+const PORT = process.env.PORT | 4000; // Use your specified port
 
 // Connect to MongoDB
-mongoose.connect(process.env.MDB_conection_String, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.error("MongoDB connection error:", err));
+require('dotenv').config();
+//mongoose.connect(process.env.MDB_conection_String, { useNewUrlParser: true, useUnifiedTopology: true })
+//  .then(() => console.log("MongoDB Connected"))
+  //.catch(err => console.error("MongoDB connection error:", err));
+
+const mongodbURL=process.env.MDB_conection_String;
+console.log("Mongodb URL:",mongodbURL);
+const  mongoConect=async(mongodbURL)=>{
+  console.log(mongodbURL);
+  try {
+    (await mongoose.connect(mongodbURL))
+    console.log('db connection status:', mongoose.connection.readyState);
+
+    mongoose.connection.on("error", err => {
+  console.error("MongoDB runtime error:", err);
+  });
+
+    console.log("Mongodb connected");
+
+  } catch (error) {
+    console.error("Mongodb connection error",error);
+  }
+ 
+
+}
+mongoConect(mongodbURL);
 
 // Middleware setup
 app.use(cors(
-  {origin:'http://localhost:3000',
+  {origin:process.env.CORS_ORIGIN,
   credentials:true,}
 ));
 //app.options('*',cors(
@@ -45,8 +68,7 @@ app.use((err, req, res, next) => {
 
 
 
-
-
+ 
 scrapeAndSaveData();
 
 // Start server
