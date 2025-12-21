@@ -7,6 +7,7 @@ const axios = require('axios');
 const {LocalStorage }=require('node-localstorage');
 const localStorage =new LocalStorage('./scratch');
 const  checkForAuthenticationCookie  = require("../midelwear/autho");
+const FeedBack=require('../scheema/fedaback');
 const router = Router();
 const url='http://localhost:8001/public'
 const storage = multer.diskStorage({
@@ -146,6 +147,19 @@ router.patch('/profile', checkForAuthenticationCookie,  upload.single('profileIm
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+router.post('/sendfeedback',checkForAuthenticationCookie,async(req, res)=>{
+const {message}= req.body;
+const email=req.user.email;
+const data= await FeedBack.create({
+  email:email,
+  message:message,
+});
+return res.json({data});
+});
+
+
+
 
 module.exports = router;
 

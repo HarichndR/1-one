@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
 
+const { Schema, model } = require("mongoose");
 const ProductScheema = new Schema(
   {
     title: {
@@ -16,7 +16,7 @@ const ProductScheema = new Schema(
         type:String,
         
     },
-    bread:{
+    breed:{
       type:String,
     },
     createdBy: {

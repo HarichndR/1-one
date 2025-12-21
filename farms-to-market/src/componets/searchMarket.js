@@ -10,7 +10,7 @@ const MarketPage = () => {
         const fetchMarkets = async () => {
             const params = new URLSearchParams(location.search);
             const searchQuery = params.get('search')?.toLowerCase() || '';
-            const response = await fetch(`${url}/product/markets?search=${searchQuery}`);
+            const response = await fetch(`http://localhost:8001/product/markets?search=${searchQuery}`);
             const data = await response.json();
             setData(data);
         };

@@ -8,7 +8,7 @@ export const fetchUserProfile = createAsyncThunk(
   'user/fetchUserProfile',
   async () => {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`${user_api}user/me`, {
+    const response = await axios.get(`http://localhost:8001/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Cache-Control': 'no-cache',
@@ -22,7 +22,7 @@ export const updateUserProfile = createAsyncThunk(
   'user/updateProfile',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`${user_api}user/profile`, formData, {
+      const response = await axios.patch(`http://localhost:8001/user/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -37,7 +37,7 @@ export const updateUserProfile = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, { dispatch }) => {
-    const response = await axios.post(`${user_api}user/login`, credentials, {
+    const response = await axios.post(`http://localhost:8001/user/login`, credentials, {
       headers: {
         'Content-Type': 'application/json',
       },

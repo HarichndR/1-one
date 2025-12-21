@@ -1,33 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import './myproduct.css'; // Import your CSS file
+import './myproduct.css';
+import { useSelector } from 'react-redux';
 
 const Cart = () => {
+  const { user } = useSelector((state) => state.user);
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    setCartItems(getCart());
-  }, []);
+    if (user?._id) {
+      const items = getCart(user._id);
+      setCartItems(items);
+    }
+  }, [user]);
 
-  function getCart() {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+  function getCart(userId) {
+    return JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
   }
 
   function handleRemove(productId) {
-    let cart = getCart();
+    let cart = getCart(user._id);
     cart = cart.filter(product => product._id !== productId);
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem(`cart_${user._id}`, JSON.stringify(cart));
     setCartItems(cart); // Update state
   }
 
   return (
     <div className="my-product-body">
-      <h1>Shopping Cart</h1>
-      
+      <h1>{user?.name || "User"}'s Shopping Cart</h1>
+
       {cartItems.length > 0 ? (
         cartItems.map((product) => (
           <article className="c-card" key={product._id}>
             <header className="c-card__header">
-              <img src={product.coverImageURL} className="c-card__image" alt="Card Image" />
+              <img src={product.coverImageURL} className="c-card__image" alt="Card" />
               <button className="c-card__remove-button" onClick={() => handleRemove(product._id)}>X</button>
             </header>
             <div className="c-card__body">

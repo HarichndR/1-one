@@ -79,7 +79,7 @@ const RegistrationForm = () => {
     data.append('role', role);
 
     try {
-      const response = await axios.post(`${user_api}/user/Register`, data, {
+      const response = await axios.post(`http://localhost:8001/user/Register`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

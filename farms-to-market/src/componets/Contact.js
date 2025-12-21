@@ -1,68 +1,39 @@
 import React, { useState } from 'react';
 import styles from './ContactPage.module.css';
+import axios from 'axios';
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-
+  const [formData, setFormData] = useState({ message: '' });
   const [alert, setAlert] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your server
-    setAlert({ message: 'Your message has been sent!', type: 'success' });
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    });
+    try {
+      await axios.post('http://localhost:8001/user/sendfeedback', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      setAlert({ message: 'Your message has been sent!', type: 'success' });
+      setFormData({ message: '' });
+    } catch (error) {
+      setAlert({ message: 'Failed to send your message. Please try again.', type: 'error' });
+    }
   };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Contact Us</h2>
-      {alert && <div className={alert.type === 'success' ? styles.success : styles.error}>{alert.message}</div>}
+      {alert && (
+        <div className={alert.type === 'success' ? styles.success : styles.error}>
+          {alert.message}
+        </div>
+      )}
       <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className={styles.input}
-          placeholder="Your Name"
-        />
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className={styles.input}
-          placeholder="Your Email"
-        />
-        <input
-          type="text"
-          name="subject"
-          value={formData.subject}
-          onChange={handleChange}
-          required
-          className={styles.input}
-          placeholder="Subject"
-        />
         <textarea
           name="message"
           value={formData.message}

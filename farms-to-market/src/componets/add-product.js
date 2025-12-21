@@ -42,7 +42,7 @@ const AddNewProduct = () => {
     data.append('Product_state', formData.Product_state);
    data.append('waight', formData.waight_value+"/"+formData.waight_unit)
     try {
-      const response = await axios.post(`${url}/product/add-new`, data, {
+      const response = await axios.post('http://localhost:8001/product/add-new', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

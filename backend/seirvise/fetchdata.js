@@ -1,23 +1,31 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
-const fs = require("fs");
+const fs = require('fs');
 
-async function scrapeTableData(url) {
+async function scrapePageData(url) {
     try {
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
+        const pageData = [];
 
-        // Assuming the table has a specific Bootstrap class
-        const tableData = [];
-        $('.table.table-bordered.table-hover.adScroll').each((index, element) => {
-            const rowData = [];
-            $(element).find('td').each((i, el) => {
-                rowData.push($(el).text().trim());
-            });
-            tableData.push(rowData);
+        // Select each card containing the commodity data
+        $('.card').each((index, element) => {
+            const commodity = $(element).find('.card-header p a').text().trim();
+            const mandi = $(element).find('.card-header a.fs-5').text().trim();
+            const price = $(element).find('.card-body .d-flex span.fw-bold.fs-5').first().text().trim();
+            const date = $(element).find('.card-body .d-flex span.fw-bold.ms-2').text().trim();
+
+            if (commodity && mandi && price && date) {
+                pageData.push({
+                    commodity,
+                    mandi,
+                    price,
+                    date
+                });
+            }
         });
 
-        return tableData;
+        return pageData;
     } catch (error) {
         console.error('Error:', error);
         return [];
@@ -26,82 +34,22 @@ async function scrapeTableData(url) {
 
 async function scrapeAndSaveData() {
     const allData = [];
-    const baseURL = "https://www.mandiguru.co.in/daily-bhav/maharashtra?page=";
+    const baseURL = 'https://www.mandiguru.co.in/daily-bhav/maharashtra?page=';
 
     for (let page = 1; page <= 20; page++) {
         const url = `${baseURL}${page}`;
-        const jsonDataArray = [];
-        ;
-
         try {
-            const data = await scrapeTableData(url);
-            arrData = Object.values(data);
-            /* // console.log(arrData[0]);
-                data.map(([key, mandi, names, price, date]) => {
-                  jsonDataArray.push({
-                  key: key,
-                  mandi: mandi,
-                  name: names,
-                  price: price,
-                  date: date,
-                  jon:"hdudwhh",
-  
-              });
-            });*/
-
-
-            function arrayToObjectArray(array) {
-                let objectArray = [];
-                for (let i = 0; i < array.length; i += 5) {
-                    let chunk = array.slice(i, i + 5);
-
-                    let object = {
-
-                        key: objectArray.length,
-                        index: chunk[0],
-                        mandi: {
-                            city: chunk[1], state: "maharastr",
-                            country: "india"
-                        },
-                        name: chunk[2],
-                        price: chunk[3],
-                        date: chunk[4],
-
-
-
-                        // $pice:chunk[3].map(chunk[3]*72),
-                    };
-                    objectArray.push(object);
-                }
-
-                return objectArray;
-            }
-
-            // Call the function with your original array
-            const arr = arrData.flat();
-            let result = arrayToObjectArray(arr);
-            allData.push(...result);
-
+            const data = await scrapePageData(url);
+            allData.push(...data);
         } catch (error) {
-            console.error('Error scraping data:', error);
+            console.error(`Error scraping data from page ${page}:`, error);
         }
     }
 
-    //console.log(typeof(allData));
-    //allData['$price']=allData[price]*72;
-    //console.log(typeof(allData));
-
-
-
-
-    const jsonDataa = JSON.stringify(allData, null, 2);
-    fs.writeFileSync('data.json', jsonDataa);
+    fs.writeFileSync('data.json', JSON.stringify(allData, null, 2));
     console.log('Data has been written to data.json');
-    console.log(allData.length)
-
+    console.log(`Total records scraped: ${allData.length}`);
 }
 
-
-// Call the function to start scraping and saving data
-module.exports =
-    { scrapeAndSaveData }
+// Start the scraping process
+scrapeAndSaveData();

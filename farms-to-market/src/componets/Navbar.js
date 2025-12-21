@@ -72,9 +72,14 @@ function Navbar() {
                                 <li className="nav-item">
                                     <Link className="nav-link active" to="/products">Products</Link>
                                 </li>
-                            ) : (
+                            ) : user && user.role === 'Farmer' ? (
                                 <li className="nav-item">
                                     <Link className="nav-link active" to="/myproduct">My Products</Link>
+                                </li>
+                            ) : null}
+                            {user && user.role === 'ADMIN' && (
+                                <li className="nav-item">
+                                    <Link className="nav-link active" to="/admin">Admin Panel</Link>
                                 </li>
                             )}
                             <li className="nav-item">

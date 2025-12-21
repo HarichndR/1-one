@@ -19,7 +19,7 @@ const MYproduct = () => {
     dispatch(fetchUserProfile());
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${url}/product/my-product`);
+        const response = await axios.get(`http://localhost:8001/product/my-product`);
         setProducts(response.data);
       } catch (err) {
         setError('Error fetching products / please sign in');
