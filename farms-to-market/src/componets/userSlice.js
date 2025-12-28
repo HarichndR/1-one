@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk, createActionCreatorInvariantMiddleware } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const user_api = process.env.Backend_URL;
+const user_api = process.env.BACKEND_URL;
 
 
 export const fetchUserProfile = createAsyncThunk(
   'user/fetchUserProfile',
   async () => {
     const token = localStorage.getItem('token');
-    const response = await axios.get(`http://localhost:8001/user/me`, {
+    const response = await axios.get(`${url}/user/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Cache-Control': 'no-cache',
@@ -22,7 +22,7 @@ export const updateUserProfile = createAsyncThunk(
   'user/updateProfile',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`http://localhost:8001/user/profile`, formData, {
+      const response = await axios.patch(`${url}/user/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -37,7 +37,7 @@ export const updateUserProfile = createAsyncThunk(
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, { dispatch }) => {
-    const response = await axios.post(`http://localhost:8001/user/login`, credentials, {
+    const response = await axios.post(`${url}/user/login`, credentials, {
       headers: {
         'Content-Type': 'application/json',
       },
