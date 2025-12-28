@@ -9,7 +9,7 @@ const {checkRole}= require('../midelwear/restrict');
 //const Comment = require("../models/comment");
 const checkForAuthenticationCookie= require('../midelwear/autho')
 
-const url='http://localhost:8001/public'
+const url=process.env.Static_storege_URL;
 const router = Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
