@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
-const url = process.env.Backend_URL;
+const url = process.env.BACKEND_URL;
 
 const ProductPage = () => {
     const [products, setProducts] = useState([]);
