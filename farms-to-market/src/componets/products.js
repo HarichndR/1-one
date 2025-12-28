@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './myproduct.css';
 import { useSelector } from 'react-redux';
-
+const url=process.env.BACKEND_URL;
 function Products() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ function Products() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:8001/product/products');
+        const response = await axios.get(`${url}/product/products`);
         setProducts(response.data);
       } catch (error) {
         setError('Cannot get products');
