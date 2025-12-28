@@ -1,7 +1,7 @@
 // MarketPage.js
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-const url = process.env.Backend_URL;
+const url = process.env.BACKEND_URL;
 const MarketPage = () => {
     const [data, setData] = useState([]);
     const location = useLocation();
@@ -10,7 +10,7 @@ const MarketPage = () => {
         const fetchMarkets = async () => {
             const params = new URLSearchParams(location.search);
             const searchQuery = params.get('search')?.toLowerCase() || '';
-            const response = await fetch(`http://localhost:8001/product/markets?search=${searchQuery}`);
+            const response = await fetch(`${url}/product/markets?search=${searchQuery}`);
             const data = await response.json();
             setData(data);
         };
