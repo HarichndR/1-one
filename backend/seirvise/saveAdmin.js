@@ -4,7 +4,7 @@ const User = require("../scheema/user"); // Adjust the path based on your projec
 const { createHmac, randomBytes } = require("crypto");
 
 // Replace with your MongoDB connection string
-const MONGO_URI = "mongodb://127.0.0.1:27017/farms-to-market";
+const MONGO_URI = process.env.MDB_conection_url;
 
 const createAdminUser = async () => {
   try {
