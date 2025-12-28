@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddNewProduct.module.css'; // Import your CSS module
 
-const url = process.env.Backend_URL;
+const url = process.env.BACKEND_URL;
 
 const AddNewProduct = () => {
   const [productImgPreview, setProductImgPreview] = useState(null);
