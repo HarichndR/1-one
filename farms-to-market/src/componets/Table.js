@@ -8,7 +8,7 @@ function Table() {
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:8001/product/all-product`)
+        axios.get(`${url}/product/all-product`)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
