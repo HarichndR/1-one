@@ -3,7 +3,7 @@ import axios from "axios";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import "./admin.css";
 
-const API_BASE = "http://localhost:8001/admin";
+const url = process.env.BACKEND_URL;
 const COLORS = ["#4CAF50", "#FF9800", "#2196F3"];
 
 // StatCard Component
@@ -35,7 +35,7 @@ export default function AdminPanel() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/dashboard-stats`);
+      const res = await axios.get(`${API_BASE}/admin/dashboard-stats`);
       setStats(res.data);
     } catch (error) {
       console.error("Error fetching stats:", error);
@@ -44,7 +44,7 @@ export default function AdminPanel() {
 
   const fetchFeedbacks = async (type, page = 1) => {
     try {
-      const res = await axios.get(`${API_BASE}/${type}`, { params: { page, limit: 10 } });
+      const res = await axios.get(`${API_BASE}/admin/${type}`, { params: { page, limit: 10 } });
       setFeedbacks(res.data.feedbacks);
       setPagination(res.data.pagination);
       setFeedbackType(type);
@@ -56,7 +56,7 @@ export default function AdminPanel() {
   const deleteUser = async () => {
     if (!email) return alert("Enter an email.");
     try {
-      await axios.delete(`${API_BASE}/removeuserByEmail`, { data: { email } });
+      await axios.delete(`${API_BASE}/admin/removeuserByEmail`, { data: { email } });
       alert("User deleted successfully");
       setEmail("");
       fetchStats();
@@ -67,7 +67,7 @@ export default function AdminPanel() {
 
   const markAsRead = async (id) => {
     try {
-      await axios.patch(`${API_BASE}/markAsReaded`, { id });
+      await axios.patch(`${API_BASE}/admin/markAsReaded`, { id });
       fetchFeedbacks(feedbackType, pagination.page);
       fetchStats();
     } catch (error) {
