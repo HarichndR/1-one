@@ -13,7 +13,7 @@ const url=process.env.Static_storege_URL;
 const router = Router();
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.resolve('./public/productIMG'));
+    cb(null, path.resolve(process.env.Static_storege_URL));
   },
   filename: function (req, file, cb) {
     const fileName = `${Date.now()}-${file.originalname}`;
