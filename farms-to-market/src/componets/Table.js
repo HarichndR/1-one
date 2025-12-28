@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-const url = process.env.Backend_URL;
+const url = process.env.BACKEND_URL;
 function Table() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
