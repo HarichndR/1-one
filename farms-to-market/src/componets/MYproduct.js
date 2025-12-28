@@ -6,7 +6,7 @@ import DeleteProductButton from './diletbutton';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfile } from './userSlice';
 import { Link } from 'react-router-dom';
-const url = process.env.Backend_URL;
+const url = process.env.BACKEND_URL;
 
 
 const MYproduct = () => {
