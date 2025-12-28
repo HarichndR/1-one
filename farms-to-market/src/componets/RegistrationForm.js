@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css'; // Import your CSS file here
 import { useNavigate} from 'react-router-dom';
-const user_api = process.env.Backend_URL;
+const url= process.env.Backend_URL;
 
 const RegistrationForm = () => {
   const navigate =useNavigate();
@@ -79,7 +79,7 @@ const RegistrationForm = () => {
     data.append('role', role);
 
     try {
-      const response = await axios.post(`http://localhost:8001/user/Register`, data, {
+      const response = await axios.post(`${url}/user/Register`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
