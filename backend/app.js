@@ -1,67 +1,78 @@
-//const { scrapeAndSaveData } = require("./seirvise/fetchdata");
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-const fs = require('fs');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const AdminRoute = require('./routes/admin');
+const cors = require("cors");
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
+const AdminRoute = require("./routes/admin");
 const userRoute = require("./routes/user");
 const productRoute = require("./routes/product");
-const { checkRole } = require("./midelwear/restrict");
-const checkForAuthenticationCookie = require("./midelwear/autho");
-const { server, io, app } = require('./server');
-const chatRoute = require('./routes/Chat');
-require('dotenv').config();
+const chatRoute = require("./routes/Chat");
 
+const checkForAuthenticationCookie = require("./midelwear/autho");
 const logger = require("./seirvise/logger");
 const httpLogger = require("./midelwear/logMiddleware");
 
+const { server, app } = require("./server");
+
+const PORT = process.env.PORT || 8080;
+
+/* ------------------ LOGGING ------------------ */
 app.use(httpLogger);
 
-//const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-const PORT = process.env.PORT; // Use your specified port
-app.use(express.json());
-app.use(cookieParser());
-// Connect to MongoDB
-mongoose.connect(process.env.MDB_conection_String, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.error("MongoDB connection error:", err));
+/* ------------------ CORS (TOP) ------------------ */
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost",
+  "http://127.0.0.1",
+];
 
-// Middleware setup
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
+  credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization", "Cache-Control"],
 }));
 
-app.options('*', cors())
+app.options("*", cors());
 
-//));
+/* ------------------ PARSERS ------------------ */
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
+app.set("trust proxy", 1);
 
+/* ------------------ DB ------------------ */
+mongoose
+  .connect(process.env.MDB_conection_String)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB error:", err));
 
-//app.use(checkForAuthenticationCookie);
-app.use('/admin', checkForAuthenticationCookie, AdminRoute);
+/* ------------------ ROUTES ------------------ */
+app.use("/public", express.static(path.join(__dirname, "public")));
 
-app.use('/public', express.static(path.join(__dirname, 'public')))
-// Routes
-app.use('/user', userRoute);
-app.use('/product', productRoute);
-app.use('/chat', chatRoute);
+app.use("/user", userRoute);
+app.use("/product", productRoute);
+app.use("/chat", chatRoute);
+app.use("/admin", checkForAuthenticationCookie, AdminRoute);
+
+/* ------------------ ERROR HANDLING ------------------ */
 app.use((err, req, res, next) => {
+  logger.error(err.message, { stack: err.stack });
   res.status(500).json({ error: err.message });
 });
 
-
-
-app.use((err, req, res, next) => {
-  logger.error(`Error: ${err.message}`, { stack: err.stack });
-  res.status(500).json({ error: "Internal Server Error" });
-});
-
-
-// Start server
-server.listen(PORT, () => console.log(`Server started at PORT:${PORT}`));
+/* ------------------ SERVER ------------------ */
+server.listen(PORT, () =>
+  console.log(`🚀 Server running on port ${PORT}`)
+);
