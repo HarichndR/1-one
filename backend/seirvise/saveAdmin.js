@@ -4,20 +4,20 @@ const User = require("../scheema/user"); // Adjust the path based on your projec
 const { createHmac, randomBytes } = require("crypto");
 
 // Replace with your MongoDB connection string
-const MONGO_URI = process.env.MDB_conection_url;
+const MONGO_URI = 'mongodb+srv://harichndrsolunke4_db_user:e4xPCaMbKJaoI89r@cluster0.dg1eofu.mongodb.net/?appName=Cluster0';
 
 const createAdminUser = async () => {
   try {
     await mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    
+
 
     const adminUser = new User({
       fullName: "Admin User",
       email: "myAdmin@gmail.com",
       M_number: "1234567890", // Change if needed
       address: "Admin Address",
-      
+
       password: 'Hari@1807',
       profileImageURL: "http://localhost:8001/images/admin.png",
       role: "ADMIN",

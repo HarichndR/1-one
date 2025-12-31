@@ -1,11 +1,11 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css'; // Import your CSS file here
-import { useNavigate} from 'react-router-dom';
-const url= process.env.Backend_URL;
+import { useNavigate } from 'react-router-dom';
+const url = process.env.REACT_APP_BACKEND_URL;
 
 const RegistrationForm = () => {
-  const navigate =useNavigate();
+  const navigate = useNavigate();
   const [profileImg, setProfileImg] = useState(null);
   const [profileImgPreview, setProfileImgPreview] = useState(null);
   const [fullName, setFullName] = useState('');
@@ -36,7 +36,7 @@ const RegistrationForm = () => {
   const handleProfileImgChange = (e) => {
     const file = e.target.files[0];
     setProfileImg(file);
-    setProfileImgPreview(URL.createObjectURL(file)); 
+    setProfileImgPreview(URL.createObjectURL(file));
   };
 
   const validate = () => {
@@ -98,94 +98,94 @@ const RegistrationForm = () => {
 
   return (
     <>
-    {alert && <div className={`alert ${alert.type}`}>{alert.message}</div>}
+      {alert && <div className={`alert ${alert.type}`}>{alert.message}</div>}
 
-    <form className="registration-form" onSubmit={handleSubmit}>
-      
-      <div>
-        <label htmlFor="profileImg">Profile Image:</label>
-        <input 
-          type="file" 
-          id="profileImg" 
-          name="profileImg" 
-          accept="image/*" 
-          onChange={handleProfileImgChange} 
-        />
-        {profileImgPreview && (
-          <div>
-            <img src={profileImgPreview} alt="Profile Preview" className="profile-img-preview" />
-          </div>
-        )}
-      </div>
-      <div>
-        <label htmlFor="fullName">Full Name:</label>
-        <input 
-          type="text" 
-          id="fullName" 
-          name="fullName" 
-          value={fullName} 
-          onChange={(e) => setFullName(e.target.value)} 
-        />
-        {errors.fullName && <span className="error">{errors.fullName}</span>}
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-        />
-        {errors.email && <span className="error">{errors.email}</span>}
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-        />
-        {errors.password && <span className="error">{errors.password}</span>}
-      </div>
-      <div>
-        <label htmlFor="M_number">Mobile Number:</label>
-        <input
-          type="text"
-          id="M_number"
-          name="M_number"
-          value={M_number}
-          onChange={(e) => setM_number(e.target.value)}
-        />
-        {errors.M_number && <span className="error">{errors.M_number}</span>}
-      </div>
-      <div>
-        <label htmlFor="address">Address:</label>
-        <textarea
-          id="address"
-          name="address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          rows="3"
-        />
-        {errors.address && <span className="error">{errors.address}</span>}
-      </div>
-      <div>
-        <label htmlFor="role">Role:</label>
-        <select 
-          id="role" 
-          name="role" 
-          value={role} 
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="Farmer">Farmer</option>
-          <option value="Buyer">Buyer</option>
-        </select>
-      </div>
-      <button type="submit">Register</button>
-    </form>
+      <form className="registration-form" onSubmit={handleSubmit}>
+
+        <div>
+          <label htmlFor="profileImg">Profile Image:</label>
+          <input
+            type="file"
+            id="profileImg"
+            name="profileImg"
+            accept="image/*"
+            onChange={handleProfileImgChange}
+          />
+          {profileImgPreview && (
+            <div>
+              <img src={profileImgPreview} alt="Profile Preview" className="profile-img-preview" />
+            </div>
+          )}
+        </div>
+        <div>
+          <label htmlFor="fullName">Full Name:</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+          />
+          {errors.fullName && <span className="error">{errors.fullName}</span>}
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {errors.email && <span className="error">{errors.email}</span>}
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {errors.password && <span className="error">{errors.password}</span>}
+        </div>
+        <div>
+          <label htmlFor="M_number">Mobile Number:</label>
+          <input
+            type="text"
+            id="M_number"
+            name="M_number"
+            value={M_number}
+            onChange={(e) => setM_number(e.target.value)}
+          />
+          {errors.M_number && <span className="error">{errors.M_number}</span>}
+        </div>
+        <div>
+          <label htmlFor="address">Address:</label>
+          <textarea
+            id="address"
+            name="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            rows="3"
+          />
+          {errors.address && <span className="error">{errors.address}</span>}
+        </div>
+        <div>
+          <label htmlFor="role">Role:</label>
+          <select
+            id="role"
+            name="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="Farmer">Farmer</option>
+            <option value="Buyer">Buyer</option>
+          </select>
+        </div>
+        <button type="submit">Register</button>
+      </form>
     </>
   );
 };

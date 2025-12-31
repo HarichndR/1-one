@@ -1,107 +1,99 @@
-import { createSlice, createAsyncThunk, createActionCreatorInvariantMiddleware } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const user_api = process.env.BACKEND_URL;
-
+import api from "../api/api";
+const url = process.env.REACT_APP_BACKEND_URL;
 
 export const fetchUserProfile = createAsyncThunk(
-  'user/fetchUserProfile',
-  async () => {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(`${url}/user/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Cache-Control': 'no-cache',
-      },
-      withCredentials: true,
-    });
-    return response.data;
+  "user/fetchUserProfile",
+  async (_, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return rejectWithValue("No token");
+
+    try {
+      const response = await api.get(`/user/me`)//, {
+      //  headers: {
+      //   Authorization: `Bearer ${token}`,
+
+      // },
+      //};
+      console.log('userslice ' + response)
+      return response.data;
+    } catch (error) {
+      return rejectWithValue("Unauthorized");
+    }
   }
 );
+
+/* =========================
+   UPDATE USER PROFILE
+========================= */
 export const updateUserProfile = createAsyncThunk(
-  'user/updateProfile',
+  "user/updateProfile",
   async (formData, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+
     try {
-      const response = await axios.patch(`${url}/user/profile`, formData, {
+      const response = await api.patch(`/user/profile`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
     } catch (error) {
-      // If an error occurs, reject the promise with the error message
-      return rejectWithValue(error.response.data);
+      return rejectWithValue("Profile update failed");
     }
   }
 );
-export const loginUser = createAsyncThunk(
-  'user/loginUser',
-  async (credentials, { dispatch }) => {
-    const response = await axios.post(`${url}/user/login`, credentials, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
 
-    const token = response.data.token;
-    localStorage.setItem('token', token);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    await dispatch(fetchUserProfile());
-    return response.data;
-  }
-);
-
+/* =========================
+   USER SLICE
+========================= */
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
     user: null,
     loading: false,
     error: null,
   },
-  
+
   reducers: {
     logout: (state) => {
-      localStorage.removeItem('token');
-      axios.defaults.headers.common['Authorization'] = null;
+      localStorage.removeItem("token");
       state.user = null;
+      state.error = null;
     },
   },
+
   extraReducers: (builder) => {
     builder
+      /* Fetch Profile */
       .addCase(fetchUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
         state.user = action.payload;
+      })
+      .addCase(fetchUserProfile.rejected, (state) => {
         state.loading = false;
+        state.user = null;
       })
-      .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.loading = false;
-        
-      })
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = 'An error occurred during login';
-      })
+
+      /* Update Profile */
       .addCase(updateUserProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // Assuming the payload contains updated user data
+        state.user = action.payload;
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Assuming the payload contains error message
+        state.error = action.payload;
       });
   },
 });

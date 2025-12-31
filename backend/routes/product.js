@@ -1,67 +1,78 @@
 const { Router } = require("express");
 const multer = require("multer");
 const path = require("path");
-const fs =require("fs");
+const fs = require("fs");
 const Product = require("../scheema/product");
 const { fstat } = require("fs");
 const { isUtf8 } = require("buffer");
-const {checkRole}= require('../midelwear/restrict');
+const { checkRole } = require('../midelwear/restrict');
 //const Comment = require("../models/comment");
-const checkForAuthenticationCookie= require('../midelwear/autho')
+const checkForAuthenticationCookie = require('../midelwear/autho')
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+require('dotenv').config();
 
-const url=process.env.Static_storege_URL;
+const url = process.env.STORAGE_URL;
 const router = Router();
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(process.env.Static_storege_URL));
-  },
-  filename: function (req, file, cb) {
-    const fileName = `${Date.now()}-${file.originalname}`;
-    cb(null, fileName);
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: (req, file) => {
+    return {
+      folder: 'productIMG',                  // Folder in Cloudinary
+      allowed_formats: ['jpg', 'png'],       // Allowed formats
+      public_id: `${Date.now()}-${file.originalname.split('.')[0]}` // Custom filename
+    };
   },
 });
 
 const upload = multer({ storage: storage });
 
 
- router.get("/all-product" ,(req, res)=>{
-    const products=  fs.readFileSync('data.json','utf8');
-    json_product=JSON.parse(products);
-     return res.json(json_product);
- });
- 
+router.get("/all-product", (req, res) => {
+  const products = fs.readFileSync('data.json', 'utf8');
+  json_product = JSON.parse(products);
+  return res.json(json_product);
+});
 
- router.get("/my-product",checkRole('Farmer'), checkForAuthenticationCookie, async (req, res) => {
+
+router.get("/my-product", checkForAuthenticationCookie, checkRole('Farmer'), async (req, res) => {
   try {
-    const my_Product = await Product.find({createdBy:req.user._id}).populate('createdBy');
+    const my_Product = await Product.find({ createdBy: req.user._id }).populate('createdBy');
     if (!my_Product) {
       return res.status(404).json({ msg: "Product not found" }); // Added error handling for product not found
     }
-    return res.json( my_Product );
+    return res.json(my_Product);
   } catch (err) {
     return res.status(500).json({ error: err.message }); // Added error handling for server errors
   }
 });
 
-router.get('/products',checkForAuthenticationCookie, checkRole('Buyer'), async (req, res) => {
+router.get('/products', checkForAuthenticationCookie, checkRole('Buyer'), async (req, res) => {
   try {
     const products = await Product.find({}).populate('createdBy');
-    res.json( products );
+    res.json(products);
   } catch (err) {
     res.status(500).json({ error: err.message }); // Added error handling for server errors
   }
 });
 
-router.post("/add-new",checkRole('Farmer'), checkForAuthenticationCookie, upload.single("coverImage"), async (req, res) => {
+router.post("/add-new", checkRole('Farmer'), checkForAuthenticationCookie, upload.single("coverImage"), async (req, res) => {
   try {
-    const {  waight,title, bread, Product_state } = req.body;
+    const { waight, title, bread, Product_state } = req.body;
     const product = await Product.create({
       waight,
       title,
       bread,
       Product_state,
       createdBy: req.user._id,
-      coverImageURL: `${url}/productIMG/${req.file.filename}`,
+      coverImageURL: req.file.path,
     });
     return res.json({ msg: "New item added", productId: product._id }); // Changed from res.redirect to res.json
   } catch (err) {

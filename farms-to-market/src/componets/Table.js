@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-const url = process.env.BACKEND_URL;
+import api from "../api/api";
+const url = process.env.REACT_APP_BACKEND_URL;
 function Table() {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -8,7 +9,7 @@ function Table() {
     const scrollContainerRef = useRef(null);
 
     useEffect(() => {
-        axios.get(`${url}/product/all-product`)
+        api.get(`/product/all-product`)
             .then(response => {
                 setData(response.data);
                 setLoading(false);
@@ -55,7 +56,7 @@ function Table() {
     return (
         <div className="container mt-0">
             <div className="row">
-                <div className="table-responsive top-0" style={{ height:'700px', overflowY: 'auto' , width:'100%'}} ref={scrollContainerRef}>
+                <div className="table-responsive top-0" style={{ height: '700px', overflowY: 'auto', width: '100%' }} ref={scrollContainerRef}>
                     <table className="table table-bordered table-striped " >
                         <thead className="thead-dark sticky-top-10 bg-white p-0 shadow-md">
                             <tr>

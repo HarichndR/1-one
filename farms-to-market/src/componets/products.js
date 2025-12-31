@@ -3,18 +3,24 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './myproduct.css';
 import { useSelector } from 'react-redux';
-const url=process.env.BACKEND_URL;
+import api from "../api/api";
+
+
+
+const url = process.env.REACT_APP_BACKEND_URL;
 function Products() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  
+
   const { user } = useSelector((state) => state.user); // get logged-in user
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${url}/product/products`);
+        const response = await api.get(`/product/products`);
+
         setProducts(response.data);
       } catch (error) {
         setError('Cannot get products');

@@ -22,12 +22,15 @@ const SearchBar = React.memo(({ query, handleSearchChange, handleSearch, isSearc
 
 function Navbar() {
     const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.user);
 
+    //console.log(user);
     useEffect(() => {
-        dispatch(fetchUserProfile());
+        if (localStorage.getItem("token")); {
+            dispatch(fetchUserProfile());
+        }
     }, [dispatch]);
-
+    const { user } = useSelector((state) => state.user);
+    console.log(user);
     const [query, setQuery] = useState('');
     const navigate = useNavigate();
     const location = useLocation();

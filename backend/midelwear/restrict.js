@@ -4,8 +4,13 @@ const localStorage = new LocalStorage('./scratch');
 
 function checkRole(roles) {
   return function (req, res, next) {
-    const token = localStorage.getItem('token');
-    
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Authorization token missing" });
+    }
+
+    const token = authHeader.split(" ")[1];
     if (!token) {
       return res.status(401).send('Unauthorized: No token provided');
     }
@@ -28,7 +33,7 @@ function checkRole(roles) {
       console.error('Payload.user is undefined or null');
       return res.status(401).send('Unauthorized: Invalid token structure');
     }
-    
+
 
     // Check if payload and payload.user exist and if payload.user has a role
     if (roles.includes(payload.role)) {
@@ -39,4 +44,4 @@ function checkRole(roles) {
   };
 }
 
-module.exports = {checkRole} ;
+module.exports = { checkRole };

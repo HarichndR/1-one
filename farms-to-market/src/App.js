@@ -11,7 +11,7 @@ import Logout from './componets/logout';
 import AddNewProduct from './componets/add-product';
 import Products from './componets/products';
 import Cart from './componets/cart';
-import Chat from './componets/ChatPage';
+
 import MarketPage from './componets/searchMarket';
 import ProductPage from './componets/searchproduct';
 import AdminPanel from './componets/admin';
@@ -25,7 +25,7 @@ function App() {
                         <Route path="/" element={<Home />} />
                         <Route path="/add-product" element={<AddNewProduct />} />
                         <Route path="/cart" element={<Cart />} />
-                        <Route path="/chat/recipientId" element={<Chat />} />
+
                         <Route path="/Contact" element={<Contact />} />
                         <Route path="/myproduct" element={<MYproduct />} />
                         <Route path="/login" element={<Login />} />

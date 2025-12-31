@@ -1,32 +1,20 @@
-// middleware/autho.js
 const { validateToken } = require("../seirvise/autho");
-const { LocalStorage } = require("node-localstorage");
-const localStorage = new LocalStorage('./scratch');
 
-function checkForAuthenticationCookie(req, res, next) {
-  try {
-    const token = localStorage.getItem('token'); // Retrieve the token from localStorage using the correct key
-    
+module.exports = async (req, res, next) => {
+  console.log('mid called')
+  const authHeader = req.headers.authorization;
 
-    if (!token) {
-      return res.status(401).json({ error: 'Token not provided' });
-    }
-
-    // Validate and decode the token
-    try{
-     const userPayload=validateToken(token)
-      req.user = userPayload; // Set user payload in request object
-      next(); // Proceed to the next middleware
-    }
-    catch(error) {
-      console.error('Error validating token:', error.message);
-      return res.status(401).json({ error: 'Invalid token' });
-    };
-  
-  } catch (error) {
-    console.error('Error in checkForAuthenticationCookie middleware:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Authorization token missing" });
   }
-}
 
-module.exports = checkForAuthenticationCookie;
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const payload = await validateToken(token);
+    req.user = payload; // attach user
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};

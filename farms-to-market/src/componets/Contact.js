@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ContactPage.module.css';
-import axios from 'axios';
-const url=process.env.BACKEND_URL;
+import api from "../api/api";
+const url = process.env.REACT_APP_BACKEND_URL;
 const ContactPage = () => {
   const [formData, setFormData] = useState({ message: '' });
   const [alert, setAlert] = useState(null);
@@ -13,7 +13,7 @@ const ContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${url}/user/sendfeedback`, formData, {
+      await api.post(`/user/sendfeedback`, formData, {
         headers: {
           'Content-Type': 'application/json',
         },

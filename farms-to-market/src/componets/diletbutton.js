@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
+import api from "../api/api";
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
- const url=process.env.BACKEND_URL;
+const url = process.env.REACT_APP_BACKEND_URL;
 const DeleteProductButton = ({ productId, onDeleteSuccess }) => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user); // Assuming you have user information in the Redux store
@@ -12,7 +12,7 @@ const DeleteProductButton = ({ productId, onDeleteSuccess }) => {
     const confirmDelete = confirm('Are you sure you want to delete this product?');
     if (confirmDelete) {
       try {
-        const response = await axios.delete(`${url}/product/delete/${productId}`, {
+        const response = await api.delete(`/product/delete/${productId}`, {
           headers: {
             // Add any required headers here, such as authorization tokens
             Authorization: `Bearer ${user.token}`, // Assuming user token is stored in user state
