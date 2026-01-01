@@ -17,7 +17,7 @@ const httpLogger = require("./midelwear/logMiddleware");
 
 const { server, app } = require("./server");
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 1024;
 
 /* ------------------ LOGGING ------------------ */
 app.use(httpLogger);
